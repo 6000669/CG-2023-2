@@ -10,8 +10,9 @@
 </head>
 <body>
 <script src="three.min.js"></script>
-<script>
-const scene = new THREE.Scene();  //Metodo para crear una nueva escena 
+<script>  //incluye la biblioteca Three.js desde una ubicación interna o llamada offline
+
+const scene = new THREE.Scene();  //Metodo para crear una nueva escena mediante la libreria de three.js
 
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );  //Metodo para crear una camara en pespectiva 
 //Primer parametro, campo de vision, numero en grados
@@ -21,23 +22,23 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 
 const renderer = new THREE.WebGLRenderer();  //Renderizar mediante WebGL /El metodo puede utilizar parametros dependiendo la situacion.
 
-renderer.setSize( window.innerWidth, window.innerHeight );  //Definir el tamaño del lienzo, el primer parametro es el ancho de la ventana y el segundo sera la altura
+renderer.setSize( window.innerWidth, window.innerHeight );  //Definir el tamaño del renderizador, el primer parametro es el ancho de la ventana y el segundo sera la altura
 
-document.body.appendChild( renderer.domElement );  //Metodo para agregar un nodo al final 
+document.body.appendChild( renderer.domElement );  //Agrega el renderizador WebGL al documento HTML
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );  //Metodo para crear un cubo rectangular con parametros de ancho, altura y profunidad respectivamente
 
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );  //Metodo para definir el material de la figura creada
-const cube = new THREE.Mesh( geometry, material );  //Clase que representa los objetos 
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );  //Metodo para definir el material de la figura creada, en este caso el material es de color verde
+const cube = new THREE.Mesh( geometry, material );  //Clase que representa los objetos que combina la geometria y el material
 //Primer parametro, es  un Buffergemotry, osea el objeto geometrico que creamos anteriormente
 //Segundo parametro, se le da el material definido
 
 scene.add( cube );  //Agregar a la escena el cubo 
 
-camera.position.z = 5;  //Posicion de la camara en z
+camera.position.z = 5;  //Configura la posición de la cámara en el eje Z a 5 unidades hacia afuera desde el origen.
 
-function animate() {  //Funcion en bucle para que el renderizador dibuje la escena cada vez que se actualice la pantala, 60 fps
-	requestAnimationFrame( animate );   //Funcion en bucle para que el renderizador dibuje la escena cada vez que se actualice la pantala, 60 fps
+function animate() {  //Funcion definida "animate" en bucle para realizar el ciclo de animacion en el navegador, 60 fps
+	requestAnimationFrame( animate );   //Llamado a la función animate en el próximo ciclo de animación del navegador.
 
 	cube.rotation.x += 0.01;  //Animacion de rotacion en el eje x del cubo 
 	cube.rotation.y += 0.01;  //Animacion de rotacion en el eje y del cubo 
@@ -45,7 +46,7 @@ function animate() {  //Funcion en bucle para que el renderizador dibuje la esce
 	renderer.render( scene, camera );  //Renderizar la escena y la camara
 }
 
-animate();  //llamado de la funcion animate()
+animate();  //llamado de la funcion animate() para iniciar la anmacion del cubo 
 </script>
 </body>
 </html>
