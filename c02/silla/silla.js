@@ -3,7 +3,7 @@ const scene = new THREE.Scene();  //Crear una nueva escena
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );   //Camara perspectiva
 const camera1 = new THREE.OrthographicCamera( window.innerWidth / - 50, window.innerWidth / 50, window.innerHeight / 50, window.innerHeight / - 50, 0.1, 1000 );
 camera.position.z = 5; 
-camera.position.y = -2; 
+camera.position.x = 0; 
 
 camera1.position.z=10;  
 
@@ -30,20 +30,32 @@ const backrestThickness = 0.2; // Espesor del respaldo
 
 Geometry_box = new THREE.BoxGeometry(chairWidth, chairHeight, chairDepth);
 material_box = new THREE.MeshNormalMaterial( { color: 0xffff00 } ); 
+cube = new THREE.Mesh();
 Asiento = new THREE.Mesh(Geometry_box, material_box);
-Patas = new THREE.Mesh(Geometry_box, material_box);
+Patas = new THREE.Mesh();
 Pata1 = new THREE.Mesh(Geometry_box, material_box); 
 Pata2 = new THREE.Mesh(Geometry_box, material_box); 
 Pata3 = new THREE.Mesh(Geometry_box, material_box); 
 Pata4 = new THREE.Mesh(Geometry_box, material_box); 
 
-
+//Patas
 Patas.add(Pata1, Pata2, Pata3, Pata4)
 Patas.scale.set(legWidth, legHeight, legWidth)
-Pata1.position.set(0.8,-1,0.8)
+Pata1.position.set(7,-1,7)
+Pata2.position.set(-7, -1, -7)
+Pata3.position.set(7,-1,-7)
+Pata4.position.set(-7, -1, 7)
+
+//Espaldar
+const cylinderGeometry = new THREE.CylinderGeometry(backrestRadius, backrestRadius, backrestThickness, 32);
+const cylinderMaterial = new THREE.MeshNormalMaterial();
+const cylinder = new THREE.Mesh(cylinderGeometry, material_box);
+
+cylinder.position.set(0,0,0)
+cylinder.rotation.x = Math.PI / 2;
 Asiento.scale.set(seatSize, seatThickness, seatSize)
-scene.add(Patas)
-scene.add(Asiento)
+cube.add(Asiento, Patas, cylinder)
+scene.add(cube)
 
 
 
@@ -64,6 +76,7 @@ document.addEventListener("keydown", (event) => {
 
 	function animate() 
 	{
+        //cube.rotation.x += 0.1;
 		requestAnimationFrame(animate);
 		renderer.render( scene, currentC );  //Renderizar la escena y la camara
 	}
