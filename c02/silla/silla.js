@@ -2,8 +2,8 @@ const scene = new THREE.Scene();  //Crear una nueva escena
 
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );   //Camara perspectiva
 const camera1 = new THREE.OrthographicCamera( window.innerWidth / - 50, window.innerWidth / 50, window.innerHeight / 50, window.innerHeight / - 50, 0.1, 1000 );
-camera.position.z = 5; 
-camera.position.x = 0; 
+camera.position.z = 10; 
+camera.position.y=1;
 
 camera1.position.z=10;  
 
@@ -50,17 +50,14 @@ Pata4.position.set(-7, -1, 7)
 const cylinderGeometry = new THREE.CylinderGeometry(backrestRadius, backrestRadius, backrestThickness, 32);
 const cylinderMaterial = new THREE.MeshNormalMaterial();
 const cylinder = new THREE.Mesh(cylinderGeometry, material_box);
-
-cylinder.position.set(0,0,0)
+cylinder.position.set(0, 1, -0.6);
 cylinder.rotation.x = Math.PI / 2;
+cylinder.scale.set(2,2,2)
+
+//Jerarquia de objetos
 Asiento.scale.set(seatSize, seatThickness, seatSize)
 cube.add(Asiento, Patas, cylinder)
 scene.add(cube)
-
-
-
-
-
 
 let currentC= camera;    //Variable para controlar el contro de las camaras 
 
@@ -76,7 +73,8 @@ document.addEventListener("keydown", (event) => {
 
 	function animate() 
 	{
-        //cube.rotation.x += 0.1;
+        cube.rotation.x += 0.05;
+        cube.rotation.y += 0.05;
 		requestAnimationFrame(animate);
 		renderer.render( scene, currentC );  //Renderizar la escena y la camara
 	}
