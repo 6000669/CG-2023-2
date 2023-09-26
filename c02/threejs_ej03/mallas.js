@@ -11,7 +11,7 @@ const geometry = new THREE.Geometry();
 // Definir los vértices del cono
 const radio = 3;
 const altura = 5;
-const segmentos = 20;
+const segmentos = 100;
 const tipVertex = new THREE.Vector3(0, altura, 0);
 
 
@@ -27,22 +27,30 @@ for(let i=0; i <= segmentos; i++){
 		geometry.faces.push(new THREE.Face3(i, segmentos, segmentos + 1))
 	}
 }
-geometry.vertices.push(new THREE.Vector3(0, altura, 0));
+geometry.vertices.push(tipVertex);
 
 geometry.computeFaceNormals();
 
-const material = new THREE.MeshNormalMaterial({ color: 0x00ff00, wireframe: true , side : THREE.DoubleSide });
+const textureLoader = new THREE.TextureLoader();
+textureLoader.load("textura.jpg", (loadedTexture)=>{
+	material.map = loadedTexture;
+
+})
+textureLoader.wrapS = THREE.RepeatWrapping;
+textureLoader.wrapT = THREE.RepeatWrapping;
+
+const material = new THREE.MeshBasicMaterial({ wireframe: false , side : THREE.DoubleSide});
+
 
 const customMesh = new THREE.Mesh(geometry, material);
 scene.add(customMesh);
 
 camera.position.z = 10;
 
-
 	function animate() 
 	{
-		customMesh.rotation.x += 0.01
-		customMesh.rotation.y += 0.01
+		customMesh.rotation.x += 0.01;
+		customMesh.rotation.y += 0.01;
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);  //Renderizar la escena y la camara
 	}
