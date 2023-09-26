@@ -2,6 +2,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.antialias = true;
 document.body.appendChild(renderer.domElement);
 
 
@@ -10,7 +11,7 @@ const geometry = new THREE.Geometry();
 // Definir los vértices del cono
 const radio = 3;
 const altura = 5;
-const segmentos = 50;
+const segmentos = 20;
 const tipVertex = new THREE.Vector3(0, altura, 0);
 
 
@@ -30,18 +31,18 @@ geometry.vertices.push(new THREE.Vector3(0, altura, 0));
 
 geometry.computeFaceNormals();
 
-const material = new THREE.MeshNormalMaterial({ color: 0x00ff00, wireframe: false });
+const material = new THREE.MeshNormalMaterial({ color: 0x00ff00, wireframe: true , side : THREE.DoubleSide });
 
 const customMesh = new THREE.Mesh(geometry, material);
 scene.add(customMesh);
 
 camera.position.z = 10;
-camera.position.x = 0;
-camera.position.y = 0;
+
 
 	function animate() 
 	{
-
+		customMesh.rotation.x += 0.01
+		customMesh.rotation.y += 0.01
 		requestAnimationFrame(animate);
 		renderer.render(scene, camera);  //Renderizar la escena y la camara
 	}
