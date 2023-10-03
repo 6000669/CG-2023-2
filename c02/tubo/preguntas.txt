@@ -1,0 +1,39 @@
+1. ¿Qué pasa si cambia la curva por una línea recta? ¿Cómo se verá el tubo en este caso?
+R/. Si se cambia la curva por una linea recta, se vera como el tubo sigue la linea que se le dio
+
+Para realizar una linea se define una línea recta desde (-2, 0, 0) a (2, 0, 0) utilizando THREE.CatmullRomCurve3,
+la curva será en realidad una línea recta y el tubo seguirá esa línea recta sin ningún tipo de curvatura.
+
+const curve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-2, 0, 0),
+    new THREE.Vector3(2, 0, 0),
+]);
+
+2. ¿Qué sucede si ajusta el grosor del tubo o cambia el material utilizado para renderizarlo?
+
+R/. Si se modifica el grosor del tubo, se esta cambiando el radio del objeto. 
+
+const geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), 100, 0.3, 20, false);
+
+El tercer parámetro en esta linea de codigo es la que controla el radio del tubo, por lo tanto si cambiamos dicho parametro a uno mayor de 0.3 el tubo sera mas grueso y
+si se cambia por un valor menor a 0.3 el grosor del tubo sera menor.
+
+Cambiar el Material Utilizado:
+
+El material utilizado para renderizar el tubo también afectará su apariencia. En el código entregado, se utiliza un material Phong de color verde:
+
+const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+Se puede cambiar el color del material ajustando el valor color a otro valor hexadecimal o también se pueden poner otros tipos de materiales disponibles en Three.js, 
+como materiales con textura, materiales brillantes, materiales transparentes, etc., para lograr efectos visuales diferentes.
+
+3. ¿Puede añadir iluminación y sombreado para mejorar la visualización del tubo?
+
+R/. Si se puede añadir, y la iluminacion es necesaria para poder visualizar algun tipo de materiales, en el codigo proporcionado se agregaron dos luces hemisfericas,
+las camaras estan en posiciones opuestas para iluminar el objeto por completo, pero la iluminacion 2 tiene una intensidad menor a la iluminacion 1, por lo cual se puede 
+apreciar las sombras que genera el material escogido. 
+
+var hemiLight = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 0.5);
+hemiLight.position.set(0, 500, 0);
+scene.add(hemiLight)
+
