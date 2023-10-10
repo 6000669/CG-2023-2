@@ -30,9 +30,12 @@ scene.add(axesHelper);
 
 
 // Función para crear un cubo con un tamaño específico
-function createCube(size, color) {
+function createCube(size, textura) {
     var geometry = new THREE.Geometry();
   
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(textura);
+
     // Define los vértices del cubo
     var vertices = [
       new THREE.Vector3(-size / 2, -size / 2, -size / 2), // Vértice 0
@@ -66,36 +69,66 @@ function createCube(size, color) {
     geometry.computeFaceNormals();
     geometry.computeVertexNormals();
   
-    var material = new THREE.MeshPhongMaterial({ color: color });
+    // Calcular coordenadas UV manualmente
+    geometry.faceVertexUvs[0] = [];
+    for (let i = 0; i < geometry.faces.length; i++) {
+        const face = geometry.faces[i];
+        const uvs = [];
+        for (let j = 0; j < 3; j++) {
+            const vertexIndex = face.a + (j % 3);
+            const vertex = geometry.vertices[vertexIndex];
+            uvs.push(new THREE.Vector2((vertex.x + 0.5), (vertex.y + 0.5)));
+        }
+        geometry.faceVertexUvs[0].push(uvs);
+    }
+
+    const material = new THREE.MeshBasicMaterial({ wireframe: false, side: THREE.DoubleSide, map: texture });
+
+    // Crear un material personalizado utilizando la textura cargada
+
     var cube = new THREE.Mesh(geometry, material);
   
     return cube;
   }
   
+  // Función para trasladar un cubo
+function translateCube(cube, translation) {
+    cube.position.set(translation.x, translation.y, translation.z);
+  }
+
+  var cubes = new THREE.Mesh();
+
+
   // Crea el cubo principal
-  var cube1 = createCube(1, 0x00ff00); // Tamaño 1 y color verde
+  var cube1 = createCube(1, 'textura.jpg'); //Tiene dos parametros, el Tamaño 1 y color verde
   scene.add(cube1);
   
-  // Crea un cubo más pequeño encima del cubo principal
-  var cube2 = createCube(0.5, 0x00ff00); // Tamaño 0.5 y color rojo
-  cube2.position.y = 1; // Posición encima del cubo principal
+  // Crea un cubo más pequeño y traslada encima del cubo principal
+  var cube2 = createCube(0.5, 'textura2.jpg'); //Tiene dos parametros, el Tamaño 0.5 
+  translateCube(cube2, { x: 0, y: 0.75, z: 0 }); // Traslación en el eje Y
   scene.add(cube2);
 
+
   // Crea un cubo más pequeño encima del cubo principal
-  var cube3 = createCube(0.25, 0x00ff00); // Tamaño 0.5 y color rojo
-  cube3.position.y = 1.2; // Posición encima del cubo principal
+  var cube3 = createCube(0.25, 'textura3.jpg'); ////Tiene dos parametros, el Tamaño 0.5
+  translateCube(cube3, { x: 0, y: 1.1, z: 0 });
   scene.add(cube3);
   
   // Configura la posición de la cámara y el bucle de animación
-  camera.position.z = 5;
-  camera.position.y = 2;
+  camera.position.z = 3;
+  camera.position.y = 1;
+
+  
+  cubes.add(cube1, cube2, cube3)
+  scene.add(cubes)
+ 
   
   var animate = function () {
     requestAnimationFrame(animate);
   
-    // Puedes agregar aquí las animaciones o interacciones
-  
     renderer.render(scene, camera);
+
+
   };
   
   animate();
