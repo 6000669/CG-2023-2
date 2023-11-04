@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <a href = "index.html">Volver</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Configuración de la escena
+        const scene = new THREE.Scene();
+
+        // Crear un cubo
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const cube = new THREE.Mesh(geometry);
+
+        // Configurar el material
+        const vertexShader = `
+  varying vec3 vNormal;
+  void main() {
+    vNormal = normal;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+        const fragmentShader = `
+  varying vec3 vNormal;
+  void main() {
+    vec3 lightDirection = normalize(vec3(1.0, 1.0, 1.0)); // Dirección de la fuente de luz
+    float intensity = dot(vNormal, lightDirection);
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Color rojo con sombreado
+    gl_FragColor.rgb *= intensity; // Aplicar sombreado
+  }
+`;
+
+        const shaderMaterial = new THREE.ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+        });
+
+        cube.material = shaderMaterial;
+
+        scene.add(cube);
+
+        // Configurar cámara
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 3;
+
+        // Configurar renderizador
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Función de renderización
+        const animate = () => {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        };
+
+        animate();
+
+    </script>
+    
+</body>
+
+</html>
