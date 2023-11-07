@@ -8,6 +8,8 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/10/Stats.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
     <style>
         body {
             /* configurar margin a 0 y overflow a hidden, para ocupar pantalla completa */
@@ -18,7 +20,7 @@
 </head>
 
 <body>
-
+    <div id="Stats-Salida"></div>
     <!-- Div que contendre la salida -->
     <div id="WebGL-salida">
     </div>
@@ -28,6 +30,8 @@
 
         // una vez que todo ha sido cargado, ejecutamos nuestro contenido Three.js.
         $(function () {
+
+            var stats = initStats();
 
             // creamos una scene, que contendrá todos nuestros elementos, como objetos, cámaras y luces
             //var scene THREE.Scene();  //Falta declarar la escena agregando = new
@@ -119,12 +123,44 @@
 
             // añadir la salida de la renderizacion al elemento html
             $("#WebGL-salida").append(renderer.domElement);
+
+           
+
+            var step = 0;
+            var controls = new function(){
+                this.rotationSpeed = 0.02;
+                this.bouncingSpeed = 0.03
+            }
+            var gui = new dat.GUI();
+            gui.add(controls, "rotationSpeed", 0, 0.5);
+            gui.add(controls, "bouncingSpeed", 0, 0.5);
+
             render();
             function render(){
+                stats.update();
+
+                cube.rotation.x += controls.rotationSpeed;
+                cube.rotation.y += controls.rotationSpeed;
+                cube.rotation.z += controls.rotationSpeed;
+                step += controls.bouncingSpeed;
+                sphere.position.x = 20+(10*(Math.cos(step)));
+                sphere.position.y = 2+(10*Math.abs(Math.sin(step)));
                 // renderizar la escena
                 requestAnimationFrame(render)
                 renderer.render(scene, camera);
 
+            }
+            function initStats(){
+
+                var stats = new Stats();
+
+                stats.setMode(0);
+                stats.domElement.style.position = "absolute";
+                stats.domElement.style.left = "0px";
+                stats.domElement.style.top = "0px";
+                $("#Stats-Salida").append(stats.domElement);
+
+                return stats;
             }
             
         });
